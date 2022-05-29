@@ -3,7 +3,7 @@ const refs = {
 }
 
 function createPromise(position, delay) {
-  return promise = new Promise((resolve, reject) => {
+  const promise = new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
     setTimeout(() => {
       if (shouldResolve) {
@@ -11,8 +11,9 @@ function createPromise(position, delay) {
       } else {
         reject({ position, delay });
       }
-    }, delay)
-    })
+    }, delay);
+  });
+   return promise;
 };
 
 refs.form.addEventListener('submit', (evt) => {
