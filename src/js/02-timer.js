@@ -34,7 +34,7 @@ const timer = {
             return;
         };
         this.isActive = true;
-        selectData = new Date(`${refs.inputTime.value}`);
+        const selectData = new Date(`${refs.inputTime.value}`);
         const intervalId = setInterval(() => {
             const dateNow = new Date();
             const deltaTime = selectData - dateNow;
