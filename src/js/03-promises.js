@@ -20,7 +20,7 @@ refs.form.addEventListener('submit', (evt) => {
   const amount = Number(refs.form.amount.value);
   const delayStep = Number(refs.form.step.value)
   let delay = Number(refs.form.delay.value);
-  for (i = 1; i <= amount; i += 1) {
+  for (let i = 1; i <= amount; i += 1) {
     createPromise(i, delay)
     .then(({ position, delay }) => {
       console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
