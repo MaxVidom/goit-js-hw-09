@@ -10,7 +10,7 @@ const refs = {
     timeMin: document.querySelector('[data-minutes]'),
     timeSec: document.querySelector('[data-seconds]'),
 }
-
+refs.btnStart.disabled = true;
 flatpickr('#datetime-picker', {
     enableTime: true,
     time_24hr: true,
@@ -19,7 +19,7 @@ flatpickr('#datetime-picker', {
     onClose(selectedDates) {
         console.log(selectedDates[0]);  
         if (selectedDates[0] < new Date()) {
-            alert("Виберіть дату пізніше сьогоднішньої")
+            alert("Please choose a date in the future")
             refs.btnStart.disabled = true;
             return;
         }
@@ -35,9 +35,13 @@ const timer = {
         };
         this.isActive = true;
         selectData = new Date(`${refs.inputTime.value}`);
-        setInterval(() => {
+        const intervalId = setInterval(() => {
             const dateNow = new Date();
             const deltaTime = selectData - dateNow;
+            if (deltaTime < 1000) {
+                this.isActive = false;
+                clearInterval(intervalId);
+            }
             console.log(getTimeComponent(deltaTime));
             timeDisplay(getTimeComponent(deltaTime));
         }, 1000);
@@ -47,10 +51,10 @@ const timer = {
 refs.btnStart.addEventListener('click', timer.start);
 
 function getTimeComponent(time) {
-    const sec = Math.floor((time % (1000 * 60)) / 1000);
-    const min = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-    const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const days = Math.floor((time % (1000 * 60 * 60 *24 * 7)) /(1000 * 60 * 60 * 24));
+    const sec = addLeadingZero(Math.floor((time % (1000 * 60)) / 1000));
+    const min = addLeadingZero(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    const hours = addLeadingZero(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    const days = addLeadingZero(Math.floor(time/(1000 * 60 * 60 * 24)));
     return {sec, min, hours, days};
 }
 
@@ -61,6 +65,9 @@ function timeDisplay({ sec, min, hours, days }) {
     refs.timeSec.textContent = `${sec}`;
 }
 
+function addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+}
 
 
 
